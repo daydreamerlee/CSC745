@@ -1,0 +1,38 @@
+
+# Created by ChengLi for windows Intellij
+
+### Intellij ###
+.idea/
+out/
+*.iml
+
+### For folder
+Materials/
+*.zip
+
+
+# Language Support for Java(TM) by Red Hat extension for Visual Studio Code - https://marketplace.visualstudio.com/items?itemName=redhat.java
+
+.project
+.classpath
+factoryConfiguration.json
+
+### Eclipse ###
+
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders	
+
+### For macos ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+log.txt
