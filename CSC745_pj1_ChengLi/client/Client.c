@@ -181,57 +181,54 @@ int main(int argc, char *argv[])
                 
             int newSock, clntLen;
             struct sockaddr_in clntAddr;
-            for (;;) /* Run forever */
-            {
-                /* Set the size of the in-out parameter */
-                clntLen = sizeof(clntAddr);
-                /* Wait for a client to connect */
-                if ((newSock = accept(servSock, (struct sockaddr *) &clntAddr, &clntLen)) < 0)
-                    DieWithError("accept() failed");
-                /* newSock is connected to a client! */
-                printf("Client Connected!\n");
+
+            /* Set the size of the in-out parameter */
+            clntLen = sizeof(clntAddr);
+            /* Wait for a client to connect */
+            if ((newSock = accept(servSock, (struct sockaddr *) &clntAddr, &clntLen)) < 0)
+                DieWithError("accept() failed");
+            /* newSock is connected to a client! */
+            printf("Client Connected!\n");
+            
+            char recvMessage[BUFSIZE];
+            char sendMessage[BUFSIZE];
+            char line[BUFSIZE];
+            while (1) {
+                printf("< Type 'bye' to stop the converstation >\n");
+                /* Receive the message from the client (friend) */
+                if ((bytesRcvd = recv(newSock, &recvMessage, BUFSIZE - 1, 0)) < 0)
+                    DieWithError("recv() failed");
+                recvMessage[bytesRcvd] = '\0'; /* Terminate the string! */
+                printf("%s\n", recvMessage);
                 
-                char recvMessage[BUFSIZE];
-                char sendMessage[BUFSIZE];
-                char line[BUFSIZE];
-                while (1) {
-                    printf("< Type 'bye' to stop the converstation >\n");
-                    /* Receive the message from the client (friend) */
-                    if ((bytesRcvd = recv(newSock, &recvMessage, BUFSIZE - 1, 0)) < 0)
-                        DieWithError("recv() failed");
-                    recvMessage[bytesRcvd] = '\0'; /* Terminate the string! */
-                    printf("%s\n", recvMessage);
-                    
-                    if (strcmp(recvMessage, "bye") == 0) {
-                        close(newSock); /* Close the socket that handles client */
-                        printf("----- Disconnect from my friend -----\n");
-                        break;
-                    }
-                    
-                    fgets(sendMessage, sizeof(sendMessage), stdin);
-                    sendMessage[strcspn(sendMessage, "\n")] = '\0';
-                    
-                    if (strcmp(sendMessage, "bye") == 0) {
-                        if (send(newSock, &sendMessage, strlen(sendMessage),0) != strlen(sendMessage))
-                            DieWithError("send() sent a different number of bytes than expected\n");
-                        close(newSock); /* Close the socket that handles client */
-                        printf("----- Disconnect from my friend -----\n");
-                        goto endloop;
-                    } else {
-                        /* Store the username with the message together to sendBuffer */
-                        strcpy(line, "user1");
-                        strcat(line, ": ");
-                        strcat(line, sendMessage);
-                        /* Send the message to the client (friend) */
-                        if (send(newSock, &line, strlen(line),0) != strlen(line))
-                            DieWithError("send() sent a different number of bytes than expected\n");
-                    }
-                    strcpy(recvMessage, "");
-                    strcpy(sendMessage, "");
-                    strcpy(line, "");
+                if (strcmp(recvMessage, "bye") == 0) {
+                    close(newSock); /* Close the socket that handles client */
+                    printf("----- Disconnect from my friend -----\n");
+                    break;
                 }
+                
+                fgets(sendMessage, sizeof(sendMessage), stdin);
+                sendMessage[strcspn(sendMessage, "\n")] = '\0';
+                
+                if (strcmp(sendMessage, "bye") == 0) {
+                    if (send(newSock, &sendMessage, strlen(sendMessage),0) != strlen(sendMessage))
+                        DieWithError("send() sent a different number of bytes than expected\n");
+                    close(newSock); /* Close the socket that handles client */
+                    printf("----- Disconnect from my friend -----\n");
+                    break;
+                } else {
+                    /* Store the username with the message together to sendBuffer */
+                    strcpy(line, "user1");
+                    strcat(line, ": ");
+                    strcat(line, sendMessage);
+                    /* Send the message to the client (friend) */
+                    if (send(newSock, &line, strlen(line),0) != strlen(line))
+                        DieWithError("send() sent a different number of bytes than expected\n");
+                }
+                strcpy(recvMessage, "");
+                strcpy(sendMessage, "");
+                strcpy(line, "");
             }
-endloop:
             continue;            
         } 
                 
