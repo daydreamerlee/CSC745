@@ -95,6 +95,12 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
             close(clntSocket); /* Close the socket that handles client */
             break;
         }
+
+        else if (strcmp(recvBuffer, "Option 6") == 0) {
+            printf("Client disconnected!\n\n");
+            close(clntSocket); /* Close the socket that handles client */
+            break;
+        }
         strcpy(recvBuffer, ""); /* Set recvBuffer back to an empty string */
         strcpy(sendBuffer, ""); /* Set sendBuffer back to an empty string */
     }
