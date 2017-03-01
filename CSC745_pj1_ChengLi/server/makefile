@@ -7,4 +7,4 @@ run: Server.c
 	$(CC) $(CFLAGES) *.c -o server 
 
 clean:
-	rm -f *.o run
+	rm -f *.o server

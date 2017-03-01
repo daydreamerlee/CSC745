@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
             break;
             
         case 1:
-            strcpy(sendBuffer, "Command 1"); /* Copy address of "Command 1" to sendBuffer */
+            strcpy(sendBuffer, "Option 1"); /* Copy address of "Command 1" to sendBuffer */
             /* Send the command 1 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
             break;
         
         case 2:
-            strcpy(sendBuffer, "Command 2"); /* Copy address of "Command 2" to sendBuffer */
+            strcpy(sendBuffer, "Option 2"); /* Copy address of "Command 2" to sendBuffer */
             /* Send the command 2 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
             int c;
             while ((c = getchar()) != EOF && c != '\n');
                 
-            printf("Please enter the target message: ");
+            printf("Please enter the message: ");
             fgets(sendBuffer, sizeof(sendBuffer), stdin); /* Read the whole line including empty space */
             sendBuffer[strcspn(sendBuffer, "\n")] = '\0';
             /* Send the target message to the server */
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
             break;
         
         case 3:
-            strcpy(sendBuffer, "Command 3"); /* Copy address of "Command 3" to sendBuffer */
+            strcpy(sendBuffer, "Option 3"); /* Copy address of "Command 3" to sendBuffer */
             /* Send the command 3 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -128,12 +128,12 @@ int main(int argc, char *argv[])
                 printf("There is no message for you.\n");
             } else {
                 recvBuffer[bytesRcvd] = '\0'; /* Terminate the string! */
-                printf("The message is <%s>\n", recvBuffer);
+                printf("Your messages are <%s>\n", recvBuffer);
             }
             break;
         
         case 4:
-            strcpy(sendBuffer, "Command 4"); /* Copy address of "Command 4" to sendBuffer */
+            strcpy(sendBuffer, "Option 4"); /* Copy address of "Command 4" to sendBuffer */
             /* Send the command 4 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
             break;
                 
         case 5:
-            strcpy(sendBuffer, "Command 5"); /* Copy address of "Command 5" to sendBuffer */
+            strcpy(sendBuffer, "Option 5"); /* Copy address of "Command 5" to sendBuffer */
             /* Send the command 4 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");

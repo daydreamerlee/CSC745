@@ -1,10 +1,3 @@
-//  LoginUser.c
-//  server
-//
-//  Created by Xinlu Chen on 10/17/16.
-//  Copyright © 2016 CSC745. All rights reserved.
-//
-
 #include <stdio.h> /* for printf() and fprintf() */
 #include <string.h>
 #include <stdlib.h>

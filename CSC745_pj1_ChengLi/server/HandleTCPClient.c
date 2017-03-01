@@ -23,7 +23,7 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
         recvBuffer[recvMsgSize] = '\0';
         
         /* Get the user list by command 1 */
-        if (strcmp(recvBuffer, "Command 1") == 0) {
+        if (strcmp(recvBuffer, "Option 1") == 0) {
             printf("Return user list!\n");
             int i;
             char userList[USERBUF] = "There are 2 users: \n";
@@ -37,7 +37,7 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
         }
         
         /* Send a message by command 2 */
-        else if (strcmp(recvBuffer, "Command 2") == 0) {
+        else if (strcmp(recvBuffer, "Option 2") == 0) {
             /* Receive the target username from client */
             if ((recvMsgSize = recv(clntSocket, recvBuffer, BUFSIZE, 0)) < 0)
                 DieWithError("recv() failed");
@@ -49,7 +49,7 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
             for (i = 0; i < USERNUM; i++) {
                 if (strcmp(users[i].username, recvBuffer) == 0) {
                     targetUser = &users[i];
-                    printf("A message to <%s>\n", recvBuffer);
+                    printf("Got a message to <%s>\n", recvBuffer);
                     break;
                 }
             }
@@ -68,13 +68,13 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
         }
         
         /* Get user's messages by command 3 */
-        else if (strcmp(recvBuffer, "Command 3") == 0) {
+        else if (strcmp(recvBuffer, "Option 3") == 0) {
             printf("Send back <%s> message!\n", currentUser->username);
             /* Check if user has messages */
             if (strcmp(currentUser->msgBuffer, "") == 0) {
                 printf("There is no message for <%s>.\n", currentUser->username);
             } else {
-                printf("The message is <%s>\n", currentUser->msgBuffer);
+                printf("Sending out messages: <%s>\n", currentUser->msgBuffer);
             }
             /* Send user's message to the client */
             if (send(clntSocket, currentUser->msgBuffer, strlen(currentUser->msgBuffer), 0)
@@ -83,14 +83,14 @@ void HandleTCPClient(struct clientinfo *users, struct clientinfo *currentUser, i
         }
         
         /* Initiate a chat with friend by command 4 */
-        else if (strcmp(recvBuffer, "Command 4") == 0) {
+        else if (strcmp(recvBuffer, "Option 4") == 0) {
             printf("Client disconnected!\n\n");
             close(clntSocket); /* Close the socket that handles client */
             break;
         }
         
         /* Chat with friend by command 5 */
-        else if (strcmp(recvBuffer, "Command 5") == 0) {
+        else if (strcmp(recvBuffer, "Option 5") == 0) {
             printf("Client disconnected!\n\n");
             close(clntSocket); /* Close the socket that handles client */
             break;
