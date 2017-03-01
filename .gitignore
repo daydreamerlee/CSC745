@@ -8,6 +8,7 @@ out/
 
 ### For folder
 Materials/
+makefile
 *.zip
 
 
