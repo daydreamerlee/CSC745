@@ -12,6 +12,7 @@
 
 void DieWithError(char *errorMessage); /* Error handling function */
 int GetClientOptionFromMenu(); /* Show the chatting menu and return client option */
+void CleanStdin(); /*FLush stdin*/
 
 int main(int argc, char *argv[])
 {
@@ -348,6 +349,13 @@ int GetClientOptionFromMenu() {
     
     printf("Your option < enter a number>: ");
     scanf("%d", &option);
-    fflush(stdin);
+    CleanStdin();
     return option;
+}
+
+void CleanStdin() {
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
 }
