@@ -18,7 +18,7 @@ struct clientinfo *LoginUser(int newSock, struct clientinfo *users);
 int main(int argc, char *argv[])
 {
     int servSock; /* Socket descriptor for server */
-    int newSock; /* Socket descriptor to handle client */
+    int newSock; /* Socket descriptor for client */
     struct sockaddr_in chatServAddr; /* Local address */
     struct sockaddr_in chatClntAddr; /* Client address */
     unsigned short chatServPort; /* Server port */
