@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     char recvBuffer[BUFSIZE]; /* Buffer for received string */
     char sendBuffer[BUFSIZE]; /* Buffer string send to chat server */
     int bytesRcvd; /* Bytes read in single recv() */
+    int serverConnected = 0; /*Flag on server connection*/
 
     /* Create a reliable, stream socket using TCP */
     if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
@@ -69,11 +70,12 @@ int main(int argc, char *argv[])
             if ((bytesRcvd = recv(sock, &recvBuffer, BUFSIZE - 1, 0)) < 0)
                 DieWithError("recv() failed");
             recvBuffer[bytesRcvd] = '\0'; /* Terminate the string! */
+            serverConnected = 1;
             printf("%s\n", recvBuffer);
             break;
             
         case 1:
-            strcpy(sendBuffer, "Option 1"); /* Copy address of "Command 1" to sendBuffer */
+            strcpy(sendBuffer, "Option 1"); /* Copy address of "Option 1" to sendBuffer */
             /* Send the command 1 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
             break;
         
         case 2:
-            strcpy(sendBuffer, "Option 2"); /* Copy address of "Command 2" to sendBuffer */
+            strcpy(sendBuffer, "Option 2"); /* Copy address of "Option 2" to sendBuffer */
             /* Send the command 2 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -116,7 +118,7 @@ int main(int argc, char *argv[])
             break;
         
         case 3:
-            strcpy(sendBuffer, "Option 3"); /* Copy address of "Command 3" to sendBuffer */
+            strcpy(sendBuffer, "Option 3"); /* Copy address of "Option 3" to sendBuffer */
             /* Send the command 3 to the server */
             if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
                 DieWithError("send() sent a different number of bytes than expected\n");
@@ -133,12 +135,16 @@ int main(int argc, char *argv[])
             break;
         
         case 4:
-            strcpy(sendBuffer, "Option 4"); /* Copy address of "Command 4" to sendBuffer */
+            strcpy(sendBuffer, "Option 4"); /* Copy address of "Option 4" to sendBuffer */
             /* Send the command 4 to the server */
-            if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
-                DieWithError("send() sent a different number of bytes than expected\n");
-            close(sock); /* Close client socket */
-            printf("----- Disconnect with the server -----\n");
+            if(serverConnected == 1) {
+                if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
+                    DieWithError("send() sent a different number of bytes than expected\n");
+                close(sock); /* Close client socket */
+                printf("----- Disconnect with the server -----\n");
+                serverConnected = 0;    
+            }
+            
             
             /* This user becomes a server and waits another user to connect */
             struct sockaddr_in addr; /* Address as a server */
@@ -225,12 +231,15 @@ int main(int argc, char *argv[])
             break;
                 
         case 5:
-            strcpy(sendBuffer, "Option 5"); /* Copy address of "Command 5" to sendBuffer */
+            strcpy(sendBuffer, "Option 5"); /* Copy address of "Option 5" to sendBuffer */
             /* Send the command 4 to the server */
-            if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
-                DieWithError("send() sent a different number of bytes than expected\n");
-            close(sock); /* Close client socket */
-            printf("----- Disconnect with the server -----\n");
+            if(serverConnected == 1) {
+                if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
+                    DieWithError("send() sent a different number of bytes than expected\n");
+                close(sock); /* Close client socket */
+                printf("----- Disconnect with the server -----\n");
+                serverConnected = 0;    
+            }
                 
             /* The user tries to connect to another user */
             printf("Please enter your friend's IP address: ");
@@ -298,8 +307,24 @@ int main(int argc, char *argv[])
                 strcpy(line, "");
             }
             break; /* Break switch() */
+        
+        case 6:
+            strcpy(sendBuffer, "Option 6"); /* Copy address of "Option 6" to sendBuffer */
+            if(serverConnected == 1) {
+                if (send(sock, &sendBuffer, strlen(sendBuffer),0) != strlen(sendBuffer))
+                    DieWithError("send() sent a different number of bytes than expected\n");
+                close(sock); /* Close client socket */
+                printf("----- Disconnect with the server -----\n");
+                serverConnected = 0;    
+            }else {
+                printf("You are not connected to server!\n");
+            }
+            break;
+
         }
         
+
+
         strcpy(recvBuffer, ""); /* Set recvBuffer back to an empty string */
         strcpy(sendBuffer, ""); /* Set sendBuffer back to an empty string */
     }
@@ -315,6 +340,7 @@ int GetClientOptionFromMenu() {
     printf("3. Get my messages\n");
     printf("4. Initiate a chat with my friend\n");
     printf("5. Chat with my friend\n");
+    printf("6. Disconnect from server\n");
     
     printf("Your option < enter a number>: ");
     scanf("%d", &option);
